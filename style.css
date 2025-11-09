@@ -112,3 +112,18 @@ body {
     font-size: small; 
     font-weight: 600;
 }
+
+#resetContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
+
+#resetButton{
+    cursor : pointer;
+    color: white;
+    padding: 2% 4% 2% 4%;
+    border: 1px solid rgb(114, 147, 235);
+    background-color: rgb(114, 147, 235);
+    border-radius: 12px;
+}

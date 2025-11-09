@@ -6,6 +6,7 @@ const angleElement = document.getElementById("angleDisplay");
 const leftWeightElement = document.getElementById("leftWeight");
 const rightWeightElement = document.getElementById("rightWeight");
 const nextWeightElement = document.getElementById("nextWeight");
+const resetButtonElement = document.getElementById("resetButton");
 let visualizedNextWeightElement = null;
 let visualizedMarkerElement = null;
 const seesawPos = seesawElement.getBoundingClientRect();
@@ -27,6 +28,9 @@ const STATE_KEY = "seesawState";
 sceneElement.addEventListener("click", handleClick);
 sceneElement.addEventListener("mousemove" , () => {handleMouseMove(event)})
 
+resetButtonElement.addEventListener("click" , resetButtonClick)
+
+
 document.addEventListener('DOMContentLoaded' , () => {
     restoreState();
     
@@ -46,6 +50,25 @@ function handleMouseMove(event){
     visualizeNextWeight();
 }
 
+function resetButtonClick(){ 
+    rightSideWeight = 0;
+    leftSideWeight = 0;
+    seesawWeights = {
+    rightSide : [],
+    leftSide : [],
+    origin : []
+    }
+    torque = 0;
+    currentAngle = 0;
+    plankElement.querySelectorAll('.new-weight').forEach(node => node.remove());
+    plankElement.style.setProperty("--tilt", `0deg`);
+    angleElement.textContent = currentAngle;
+    rightWeightElement.textContent = rightSideWeight;
+    leftWeightElement.textContent = leftSideWeight;
+    createNextRandomWeight();
+    nextWeightElement.textContent = nextWeight;
+    localStorage.removeItem(STATE_KEY);
+} 
 
 function saveState() {
     const snapshot = {
@@ -62,7 +85,7 @@ function saveState() {
 function updateUIFromState() {
     leftWeightElement.textContent = leftSideWeight;
     rightWeightElement.textContent = rightSideWeight;
-    angleElement.textContent = currentAngle;
+    angleElement.textContent = currentAngle.toFixed(2);
     nextWeightElement.textContent = nextWeight;
     plankElement.style.setProperty("--tilt", `${currentAngle}deg`);
     for(let i = 0; i < seesawWeights.leftSide.length; i++){
@@ -150,7 +173,7 @@ function addWeightToSeesawVisualization(weight ,xCoord , angle ){
 function calcTiltAngle(weight , xCoord){
     torque += weight * xCoord;
     currentAngle = Math.max(-30, Math.min(30, torque / 10));
-    angleElement.innerHTML = currentAngle;
+    angleElement.innerHTML = currentAngle.toFixed(2);
     plankElement.style.setProperty("--tilt", `${currentAngle}deg`);
     
 }
